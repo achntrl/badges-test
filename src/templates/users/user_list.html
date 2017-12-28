@@ -1,3 +1,12 @@
-{% for user in object_list %}
-    {{ user.username }}
-{% endfor %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<ul>
+    {% for user in object_list %}
+        <li>
+            {{ user.username }}
+            {% if user.star %}<i class="fa fa-star" title="Star"></i> {% endif %}
+            {% if user.pioneer %}<i class="fa fa-birthday-cake" title="Pioneer"></i> {% endif %}
+            {% if user.collector %}<i class="fa fa-book" title="Collector"></i> {% endif %}
+        </li>
+    {% endfor %}
+</ul>
