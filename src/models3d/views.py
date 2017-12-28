@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
 from django.views.generic.base import View
+from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
 
-from .models import Model
 from .forms import ModelCreateForm
+from .models import Model
 from .processing import Processor
+from badges.models import Collector
 
 
 class ModelCreateView(CreateView):
@@ -16,8 +17,13 @@ class ModelCreateView(CreateView):
 
     def form_valid(self, form):
         model = form.save(commit=False)
-        model.user = User.objects.get(pk=self.request.user.pk)
+        user = User.objects.get(pk=self.request.user.pk)
+        model.user = user
         model.save()
+
+        if user.models.count() >= 5 and not Collector.objects.filter(user=user).exists():
+            collector = Collector(user=user)
+            collector.save()
 
         processor = Processor()
         processor.configure(model.file.path)
