@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from datetime import timedelta
 
-from .models import Star, Collector, Pioneer
+from .models import Star, Collector, Pioneer, PowerUser
 from models3d.models import Model
 
 
@@ -37,3 +37,10 @@ class BadgeTestCase(TestCase):
     def test_pioneer(self):
         self.client.login(username=self.user.username, password='password')
         self.assertTrue(Pioneer.objects.filter(user=self.user))
+
+    def test_power_user(self):
+        self.client.login(username=self.user.username, password='password')
+        with open('data/tests/big_model.obj') as fd:
+                self.client.post('/models', data={'file': fd})
+
+        self.assertTrue(PowerUser.objects.filter(user=self.user))

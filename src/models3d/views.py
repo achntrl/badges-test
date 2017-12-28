@@ -7,7 +7,7 @@ from django.views.generic.list import ListView
 from .forms import ModelCreateForm
 from .models import Model
 from .processing import Processor
-from badges.models import Collector, Star
+from badges.models import Collector, PowerUser, Star
 
 
 class ModelCreateView(CreateView):
@@ -29,6 +29,11 @@ class ModelCreateView(CreateView):
         processor.configure(model.file.path)
         model.weight = processor.weigh()
         model.vertice_count = processor.count_vertices()
+
+        if model.vertice_count >= 100 and not PowerUser.objects.filter(user=user).exists():
+            poweruser = PowerUser(user=user)
+            poweruser.save()
+
         model.save()
 
         return super(ModelCreateView, self).form_valid(form)

@@ -15,3 +15,8 @@ class Collector(models.Model):
 class Pioneer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class PowerUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
