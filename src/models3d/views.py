@@ -7,7 +7,7 @@ from django.views.generic.list import ListView
 from .forms import ModelCreateForm
 from .models import Model
 from .processing import Processor
-from badges.models import Collector
+from badges.models import Collector, Star
 
 
 class ModelCreateView(CreateView):
@@ -50,3 +50,14 @@ class ModelDetailView(DetailView):
     queryset = Model.objects.all()
     slug_field = 'name'
     slug_url_kwarg = 'name'
+
+    def get_object(self, queryset=None):
+        model = super(ModelDetailView, self).get_object(queryset=queryset)
+        model.views += 1
+        model.save()
+
+        if model.views >= 100 and not Star.objects.filter(user=model.user).exists():
+            star = Star(user=model.user)
+            star.save()
+
+        return model
