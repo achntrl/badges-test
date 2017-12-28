@@ -5,7 +5,8 @@ class Processor(object):
     """This class is doing dummy actions for the exercice purpose. In real life, these actions
     would be costly in resources and would take some time to execute."""
 
-    vertices = []
+    def __init__(self):
+        self.vertices = []
 
     def configure(self, file):
         with open(file, 'r') as fd:
